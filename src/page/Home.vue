@@ -1,12 +1,17 @@
 <template>
     <div id="swip">
-        <van-list @load="onLoad" :offset="1">
+        <van-list @load="onLoad" :offset="1" :immediate-check="false">
             <div class="swips">
-                <div class="Have"></div>
-                <div class="foot">
-                    <h3>苏州相城方圆里最萌宝贝线上评选活动</h3>
-                    <p>报名时间    2018.07.01~2018.07.10</p>
-                    <p>投票时间    2018.07.11~2018.07.15</p>
+                <div class="Have">
+                    <img v-if="ACTIVITY.STATUS == 0" src="../assets/img/云朵_未开始@2x.png" alt="">
+                    <img v-if="ACTIVITY.STATUS == 1" src="../assets/img/云朵_进行中@2x.png" alt="">
+                    <img v-if="ACTIVITY.STATUS == 2" src="../assets/img/云朵_已结束@2x.png" alt="">
+                    <img v-if="ACTIVITY.STATUS == 3" src="../assets/img/云朵_处理中@2x.png" alt="">
+                </div>
+                <div class="foot" v-if="ACTIVITY">
+                    <h3>{{ACTIVITY.TITLE}}</h3>
+                    <p>报名时间    {{ACTIVITY.JOIN_START_TIME}}~{{ACTIVITY.JOIN_END_TIME}}</p>
+                    <p>投票时间    {{ACTIVITY.VOTE_START_TIME}}~{{ACTIVITY.VOTE_END_TIME}}</p>
                 </div>
                 <div class="Jump"><img @click="next" src="../assets/img/活动页面_下翻箭头@2x.png" alt=""></div>
             </div>
@@ -20,22 +25,35 @@ export default {
             
         }
     },
+    beforeCreate(){
+        this.$store.dispatch('activity')
+    },
+    computed:{
+        ACTIVITY(){
+            return this.$store.state.activity
+        }
+    },
     created(){
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
-        // $(document).ready(()=>{
-        //     $('html,body').animate({scrollTop:0},500)
-        // }) 
+        
     },
     methods:{
         onLoad() {
             setTimeout(()=>{
                 // this.$router.replace({path:'/Whole'})
-                this.$router.push({path:'/Whole'})
+                if(this.ACTIVITY.STATUS == 0) this.$toast('活动还未开始！')
+                if(this.ACTIVITY.STATUS == 1) this.$router.push({path:'/Whole'})
+                if(this.ACTIVITY.STATUS == 2) this.$toast('活动已结束！')
+                if(this.ACTIVITY.STATUS == 3) this.$toast('结果处理中！')
             },500)
         },
         next(){
-            this.$router.push({path:'/Whole'})
+            if(this.ACTIVITY.STATUS == 0) this.$toast('活动还未开始！')
+            if(this.ACTIVITY.STATUS == 1) this.$router.push({path:'/Whole'})
+            if(this.ACTIVITY.STATUS == 2) this.$toast('活动已结束！')
+            if(this.ACTIVITY.STATUS == 3) this.$toast('结果处理中！')
+            // this.$router.push({path:'/Whole'})
         }
     },
     watch:{
@@ -44,16 +62,21 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+    @import '../assets/toast.less';
     #swip{
         width: 100%; background: url("../assets/img/活动页面大背景@2x.png") no-repeat; background-size: 100% 95%;
     }
+    
+    
 
     .swips{
         width: 100%; height: 102vh; position: relative;
     }
     .Have{
         width: 25vw; height: 15vw; position: absolute; right: 0vw; top: 15.5vh;
-        background: url("../assets/img/活动页面_进行中@2x.png") no-repeat; background-size: 100% 100%;
+        img{
+            width: 100%; height: 100%;
+        }
     }
     .font{font-family: PingFang-SC-Medium; font-weight: Medium;}
     .foot{

@@ -10,7 +10,15 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      "/vote":{
+        target:"http://192.168.1.193:8090",
+    		changeOrigin: true,
+    		pathRewrite: {
+          '^/vote': ''
+        }
+      } 
+    },
 
     // Various Dev Server settings
     host: '192.168.1.160', // can be overwritten by process.env.HOST
@@ -43,7 +51,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: 'http://www.homeamc.cn/shopping/static/eva/',
 
     /**
      * Source Maps

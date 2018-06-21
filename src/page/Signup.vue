@@ -6,15 +6,15 @@
 
         <div class="information">
             <p>萌娃姓名</p>
-            <div class="inputs"><input type="text" placeholder="不超过10个字"></div>
+            <div class="inputs"><input type="text" v-model="list.name" placeholder="不超过10个字"></div>
             <p>个人介绍</p>
-            <div class="inputs"><input type="text" placeholder="不超过15个字"></div>
+            <div class="inputs"><input type="text" v-model="list.remark" placeholder="不超过15个字"></div>
             <p>手机号（方便联系哦！）</p>
-            <div class="inputs"><input type="text"></div>
+            <div class="inputs"><input type="text" v-model="list.phone" placeholder="11位数"></div>
             <p>验证码</p>
             <div class="inputs inputs_code">
-                <div class="code"><input type="text"></div>
-                <button class="btn_code">验证码</button>
+                <div class="code"><input type="text" v-model="list.code" placeholder="6位数"></div>
+                <button class="btn_code" :class="{codes:disabled}" @click="getCode" :disabled="disabled_btn">{{time}}</button>
             </div>
             <p>萌娃照片<span>（最多上传5张）</span></p>
             <div class="img_list">
@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <button class="btn">提交申请</button>
+        <button class="btn" @click="Submission">提交申请</button>
 
         <router-link to="/Whole">
             <div class="gohome">返回 <br>首页</div>
@@ -40,8 +40,15 @@
 export default {
     data(){
         return{
-            Item_img:[], disabled:false
+            Item_img:[],Item_imgs:[], disabled:false, time:'验证码', 
+            list:{
+                name:'', remark:'', phone:'', code:'', formData:''
+            },
+            disabled:false,disabled_btn:false
         }
+    },
+    computed:{
+        
     },
     created(){
         document.body.scrollTop = 0
@@ -52,9 +59,40 @@ export default {
         onRead(file) {
             // console.log(file)
             this.Item_img.push(file.content)
+            this.Item_imgs.push(file.file)
         },
         deletes(index){
             this.Item_img.splice(index,1)
+            this.Item_imgs.splice(index,1)
+        },
+        getCode(){
+            if(this.list.code.length != 6) {
+                this.$toast('请按规范填写信息！')
+                return
+            }
+            this.disabled_btn = true
+            this.$store.dispatch('codes', this.list)
+            this.time = 120
+            let interval = window.setInterval(()=> {
+                if ((this.time--) <= 0) {
+                    this.time = '验证码'
+                    this.disabled_btn = false
+                    window.clearInterval(interval)
+                }
+            }, 1000)
+        },
+        Submission(){
+            if(this.list.name.length > 10 || this.list.phone.length !=11 || this.list.remark.length > 15 || this.list.code.length != 6){
+                this.$toast('请按规范填写信息！')
+                return
+            }
+            var formData = new FormData()
+            // formData.append('file', this.Item_imgs)         // 这是错的，不可以直接放在数组里，不然会取不到值
+            for(var i = 0; i < this.Item_imgs.length; i ++){   
+                formData.append('file', this.Item_imgs[i])
+            }
+            this.list.formData = formData
+            this.$store.dispatch('upload', this.list)
         }
     },
     watch:{
@@ -64,13 +102,17 @@ export default {
             }else{
                 this.disabled = false
             }
-        }
+        },
     }
 }
 </script>
 <style lang="less" scoped>
     #Signup{
-        width: 100%; background-color: white; min-height: 100vh; padding-bottom: 10vw;
+        width: 100%; background-color: white; height: 115vh; padding-bottom: 10vw;
+    }
+
+    *{
+         box-sizing: border-box;
     }
 
     h3{ text-align: center;}
@@ -100,8 +142,11 @@ export default {
             width: 50%; border: 1px solid gainsboro; border-radius: 1.5vw;
         }
         .btn_code{
-            width: 30%; height: 9vw; background-color: white; border: 1px solid gainsboro; outline: none; border-radius: 1.5vw;
-            
+            width: 30%; height: 9vw; background-color: white; border: 1px solid rgba(117,190,168,1); outline: none; border-radius: 1.5vw;
+            color: rgba(117,190,168,1);
+        }
+        .codes{
+            color: gray; border: 1px solid gainsboro;
         }
     }
 

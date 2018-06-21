@@ -3,28 +3,27 @@
 
         <scroller lock-y>
             <div class="box1">
-                <div class="box1-item" v-for="(item,index) in 7" :key="index">
-                    <img src="../assets/img/er.jpg" alt="">
-                    <span>{{item}}</span>
+                <div class="box1-item" v-for="(item,index) in evaDetails.pictures" :key="index">
+                    <img :src="imgUrl + item.PICTRUE_NAME" alt="">
                 </div>
             </div>
         </scroller>
 
         <div class="detil">
             <div>
-                <span>羊咩咩</span>
+                <span>{{evaDetails.joinName}}</span>
                 <img src="../assets/img/活动页面_图标_投票数@2x.png" alt="">
-                <span>2684</span>
+                <span>{{voteNum}}</span>
             </div>
-            <p>4岁小正太，最喜欢泰迪熊和唐老鸭。</p>
+            <p>{{evaDetails.remark}}</p>
             <button class="votes" @click="Success">投票</button>
         </div>
 
         <van-popup v-model="show_vote" class="sign_vote" @click-overlay="isvote">
             <div class="sign_votes">
                 <img src="../assets/img/投票_图_投票成功@2x.png" alt="">
-                <p class="hao">22号</p>
-                <p>当前排名13</p>
+                <p class="hao">{{orderNum}}号</p>
+                <p>当前排名{{voteDetails.rownum}}</p>
                 <router-link to="/Signup"><button class="signs">我要报名</button></router-link>
                 <button class="vote">给Ta拉票</button>
             </div>
@@ -37,36 +36,57 @@ import { Scroller } from 'vux'
 export default {
     data(){
         return{
-            show:false, show_vote: false,
+            show:false, show_vote: false, voteNum:'',orderNum:''
         }
     },
     components: {
         Scroller,
     },
+    computed:{
+        imgUrl(){
+            return this.$store.state.imgUrl
+        },
+        evaDetails(){
+            if(this.$store.state.evaDetails == undefined){
+                this.$store.commit('EVA_DETAILS')
+            }
+            return this.$store.state.evaDetails
+        },
+        voteDetails(){
+            return this.$store.state.voteDetails
+        },
+    },
     beforeCreate(){
-        
+        this.$store.commit('VOTE_DETAILS', false)
+    },
+    activated(){ 
+        // console.log(this.$store.state.evaDetails)
     },
     created(){
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
 
+        this.voteNum = this.$route.query.voteNum
+        this.orderNum = this.$route.query.orderNum
+
         $(document).ready(()=>{
             var widths = 89
-            $('.box1').css('width',''+(widths*7 + 11)+'vw')
-            this.show = true
+            this.show = true  // 房子dom提前渲染
+            $('.box1').css('width',''+(widths*this.evaDetails.pictures.length + 11)+'vw')
         })
-    },
-    computed:{
-        
     },
     methods:{
         Success(){
-            // this.$store.commit('VOTES', true)
-            // this.$router.push({path:'/Whole'})
-            this.show_vote = !this.show_vote
+            this.$store.dispatch('voteDetails', this.evaDetails.id)
+            
         },
         isvote(){
             this.$router.push({path:'/Whole'})
+        }
+    },
+    watch:{
+        voteDetails(val,old){
+            if(val.message == "投票成功") this.show_vote = !this.show_vote
         }
     },
     filters:{

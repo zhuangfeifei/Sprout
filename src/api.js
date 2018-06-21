@@ -1,11 +1,13 @@
 import axios from 'axios'
 import store from './store'
 import router from './router/index'
+import { Toast } from 'vant'
 
 let localhostDev = true
+let url = localhostDev ? '/vote' : 'http://www.homeamc.cn'
 
 const api = axios.create();
-api.defaults.baseURL = localhostDev ? '/Shop' : 'http://www.homeamc.cn'
+api.defaults.baseURL = url
 api.defaults.timeout = 5000;
 api.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 // api.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest'
@@ -34,8 +36,8 @@ api.interceptors.response.use(function (response) {
       store.commit('SET_LOADING',false)
     // },2000)
 
-    if(response.data.message === "无效token") {
-      // router.replace({path: 'login'})
+    if(response.data.code != 200) {
+        Toast.fail(response.data.message)
     }
 
     return response;
@@ -43,6 +45,8 @@ api.interceptors.response.use(function (response) {
   }, function (error) {
     
       store.commit('SET_LOADING',false)
+
+      Toast.fail('网络异常！')
     
     if(errore.response) {
 
