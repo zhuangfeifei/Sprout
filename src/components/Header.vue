@@ -65,6 +65,7 @@ export default {
         background: url("../assets/img/活动页面_统计大背景@2x.png") no-repeat; background-size: 100% 100%;
         .Jump{
             width: 15%; height: 18vw; position: absolute; top: 2vw; left: 42.5%;
+            animation:dong 1s linear 0s infinite alternate;
             -webkit-animation:dong 1s linear 0s infinite alternate;
             img{
                 width: 100%; height: 100%;
@@ -104,6 +105,14 @@ export default {
     }
 
 
+    @keyframes dong{
+		from{
+			top:2vw;
+		}
+		to{
+			top: 6vw;
+		}
+	}
     @-webkit-keyframes dong{
 		from{
 			top:2vw;

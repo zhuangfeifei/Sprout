@@ -6,12 +6,11 @@
                     <img v-if="ACTIVITY.STATUS == 0" src="../assets/img/云朵_未开始@2x.png" alt="">
                     <img v-if="ACTIVITY.STATUS == 1" src="../assets/img/云朵_进行中@2x.png" alt="">
                     <img v-if="ACTIVITY.STATUS == 2" src="../assets/img/云朵_已结束@2x.png" alt="">
-                    <img v-if="ACTIVITY.STATUS == 3" src="../assets/img/云朵_处理中@2x.png" alt="">
                 </div>
                 <div class="foot" v-if="ACTIVITY">
                     <h3>{{ACTIVITY.TITLE}}</h3>
-                    <p>报名时间    {{ACTIVITY.JOIN_START_TIME}}~{{ACTIVITY.JOIN_END_TIME}}</p>
-                    <p>投票时间    {{ACTIVITY.VOTE_START_TIME}}~{{ACTIVITY.VOTE_END_TIME}}</p>
+                    <p>报名时间： {{ACTIVITY.JOIN_START_TIME}}~{{ACTIVITY.JOIN_END_TIME}}</p>
+                    <p>投票时间： {{ACTIVITY.VOTE_START_TIME}}~{{ACTIVITY.VOTE_END_TIME}}</p>
                 </div>
                 <div class="Jump"><img @click="next" src="../assets/img/活动页面_下翻箭头@2x.png" alt=""></div>
             </div>
@@ -44,15 +43,13 @@ export default {
                 // this.$router.replace({path:'/Whole'})
                 if(this.ACTIVITY.STATUS == 0) this.$toast('活动还未开始！')
                 if(this.ACTIVITY.STATUS == 1) this.$router.push({path:'/Whole'})
-                if(this.ACTIVITY.STATUS == 2) this.$toast('活动已结束！')
-                if(this.ACTIVITY.STATUS == 3) this.$toast('结果处理中！')
+                if(this.ACTIVITY.STATUS == 2) this.$router.push({path:'/Whole'})
             },500)
         },
         next(){
             if(this.ACTIVITY.STATUS == 0) this.$toast('活动还未开始！')
             if(this.ACTIVITY.STATUS == 1) this.$router.push({path:'/Whole'})
-            if(this.ACTIVITY.STATUS == 2) this.$toast('活动已结束！')
-            if(this.ACTIVITY.STATUS == 3) this.$toast('结果处理中！')
+            if(this.ACTIVITY.STATUS == 2) this.$router.push({path:'/Whole'})
             // this.$router.push({path:'/Whole'})
         }
     },
@@ -88,12 +85,21 @@ export default {
     }
     .Jump{
         width: 15%; height: 18vw; position: absolute; bottom: 4vw; left: 42.5%;
+        animation:dong 1s linear 0s infinite alternate;
         -webkit-animation:dong 1s linear 0s infinite alternate;
         img{
             width: 100%; height: 100%;
         }
     }
 
+    @keyframes dong{
+		from{
+			bottom:4vw;
+		}
+		to{
+			bottom: 10vw;
+		}
+	}
     @-webkit-keyframes dong{
 		from{
 			bottom:4vw;

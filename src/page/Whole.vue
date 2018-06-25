@@ -26,6 +26,7 @@ export default {
     },
     beforeCreate(){
         this.$store.dispatch('allCount')
+        this.$store.commit('PLAYER_RANKINGS_ORDERNUM', true)
         this.$store.dispatch('playerRankings')
     },
     created(){

@@ -6,15 +6,62 @@
     <title>萌娃活动</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      
+    </div>
+    <audio autoplay controls loop id="audio" style="display:none">
+        <source src="http://www.homeamc.cn/shopping/static/img/muse.mp3" type='audio/ogg'>
+        <source src="http://www.homeamc.cn/shopping/static/img/muse.mp3" type='audio/mpeg'>	
+    </audio>
     <!-- built files will be auto injected -->
   </body>
   <script>
 
-    const wxhs = 'puman2016'
-		const openIds = 'oLCKIwOtSoGIY6AE5iMe4U1oW-iA'
-		// var wxhs = '{wxh}'
-    // var openId = '{openId}'
+    const sprout_wxhs = 'sz_fangyuanli'
+		const sprout_openIds = 'oLCKIwOtSoGIY6AE5iMe4U1oW-iA'
+		// var sprout_wxhs = '{wxh}'
+    // var sprout_openIds = '{openId}'
+    function getLocal (key = STORAGE_USER_KEY) {
+      return JSON.parse(window.localStorage.getItem(key))
+    }
+    function setLocal (res, key = STORAGE_USER_KEY, isSaveOldData = false) {
+    //第三个参数是true的话,会增加数据而不是重新设置,res必须是数组
+      if (isSaveOldData) {
+        if(getLocal(key)) {
+          let oldData = getLocal(key);
+          return window.localStorage.setItem(key, JSON.stringify(oldData.concat(res)))
+        }
+      }
+      return window.localStorage.setItem(key, JSON.stringify(res))
+    }
+  
+		setLocal(sprout_wxhs, 'sprout_wxhs')
+		setLocal(sprout_openIds, 'sprout_openIds')
+
+
+    // var isTouchstart =true
+     //--创建页面监听，等待微信端页面加载完毕 触发音频播放
+    document.addEventListener('DOMContentLoaded', function () {
+        function audioAutoPlay() {
+            var audio = document.getElementById('audio');
+                audio.play();
+            document.addEventListener("WeixinJSBridgeReady", function () {
+                audio.play();
+            }, false);
+        }
+        audioAutoPlay();
+    });
+    //--创建触摸监听，当浏览器打开页面时，触摸屏幕触发事件，进行音频播放
+    // if(isTouchstart){
+        document.addEventListener('touchstart', function () {
+          function audioAutoPlay() {
+              var audio = document.getElementById('audio');
+                  audio.play();
+                  // isTouchstart = false
+          }
+          audioAutoPlay();
+      });
+    // }
 
   </script>
 </html>

@@ -8,7 +8,7 @@ let url = localhostDev ? '/vote' : 'http://www.homeamc.cn'
 
 const api = axios.create();
 api.defaults.baseURL = url
-api.defaults.timeout = 5000;
+// api.defaults.timeout = 5000;
 api.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 // api.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest'
 
@@ -22,7 +22,7 @@ api.interceptors.request.use(function (config) {
 
   }, function (error) {
     
-    alert('网络错误,请稍后再试')
+    Toast.fail('网络错误,请稍后再试')
 
       store.commit('SET_LOADING',false)
 
@@ -54,10 +54,10 @@ api.interceptors.response.use(function (response) {
           // 如果返回401 即没有权限，跳到登录页重新登录
         store.commit('CHANGE_TOKEN',0);
 
-        alert('请重新登录');
+        Toast.fail('请重新登录');
 
         router.replace({
-          path: 'login',
+          path: '/',
           query: {redirect: router.currentRoute.fullPath}
         })
 

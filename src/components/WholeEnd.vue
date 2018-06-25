@@ -59,15 +59,6 @@ export default {
             return this.$store.state.ruleShow
         },
         playerRankings(){
-            // var list = this.$store.state.playerRankings
-            // function compare(property) {
-            //     return function(a, b) {
-            //         var value1 = a[property];
-            //         var value2 = b[property];
-            //         return value1 - value2;
-            //     }
-            // }
-            // var s = list.sort(compare('rownum'))  // 排序
             return this.$store.state.playerRankings
         },
     },

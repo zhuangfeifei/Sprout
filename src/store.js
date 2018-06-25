@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import axios from 'axios'
 import Util from './storage'
 import Api from './api'
 import * as types from './types'
@@ -22,6 +21,7 @@ const state = {
     picList:'',             // 后台返回的图片name
     codes:false,               // 验证码
     playerRankings:'',        // 获取某一活动主题下投票排名情况
+    orderNum_list:true,        // 获取某一活动主题下投票排名情况
     newEva:'',              // 获取最新萌娃
     imgUrl: imgUrl,
     voteDetails: ''          // 是否投票成功
@@ -52,6 +52,9 @@ const mutations = {
     [types.PLAYER_RANKINGS](state,res){
         state.playerRankings = res  
     },
+    [types.PLAYER_RANKINGS_ORDERNUM](state,res){
+        state.orderNum_list = res  
+    },
     [types.EVA_DETAILS](state){
         state.evaDetails = Util.getLocal('evaDetails') 
     },
@@ -74,7 +77,7 @@ const actions = {
         .catch(err => console.log(err))
     },
     allCount({commit,state}){                                                           // 获取萌娃参与总数和累计总的投票数
-        Api.post('/shopping/vote/allCount')
+        Api.post('/shopping/vote/allCount', $.param({ activityId: parseInt(Util.getLocal('activity').ID)}))
         .then(res =>{
             // console.log(res.data)
             if(res.data.code == 200) {
@@ -88,7 +91,20 @@ const actions = {
         .then(res =>{
             // console.log(res.data)
             if(res.data.code == 200) {
-                commit('PLAYER_RANKINGS', res.data.data)
+                if(state.orderNum_list){
+                    var list = res.data.data
+                    function compare(property) {
+                        return function(a, b) {
+                            var value1 = a[property];
+                            var value2 = b[property];
+                            return value1 - value2;
+                        }
+                    }
+                    var s = list.sort(compare('orderNum'))  // 排序
+                    commit('PLAYER_RANKINGS', s)
+                }else{
+                    commit('PLAYER_RANKINGS', res.data.data)
+                }
             }
         })
         .catch(err => console.log(err))
@@ -116,7 +132,7 @@ const actions = {
         .catch(err => console.log(err))
     },
     voteDetails({commit,state}, VOTE_JOIN_ID){                                                     // 投票
-        Api.post('/shopping/vote/voteDetails', $.param({ openId: openIds, voteJoinId: VOTE_JOIN_ID}))
+        Api.post('/shopping/vote/voteDetails', $.param({ openId: Util.getLocal('sprout_openIds'), voteJoinId: VOTE_JOIN_ID}))
         .then(res =>{
             // console.log(res.data)
             if(res.data.code == 200) {
@@ -154,7 +170,7 @@ const actions = {
     },
     signUp({commit,state}, information){                                                    // 萌娃活动报名
         var join = {
-            joinName: information.name, openId: openIds, remark: information.remark, vcode: information.code,
+            joinName: information.name, openId: Util.getLocal('sprout_openIds'), remark: information.remark, vcode: information.code,
             phone: information.phone, voteActivityId: parseInt(Util.getLocal('activity').ID), picList: state.picList
         }                                               
         Api.post('/shopping/vote/signUp', $.param( join ))

@@ -9,13 +9,7 @@
             <div class="inputs"><input type="text" v-model="list.name" placeholder="不超过10个字"></div>
             <p>个人介绍</p>
             <div class="inputs"><input type="text" v-model="list.remark" placeholder="不超过15个字"></div>
-            <p>手机号（方便联系哦！）</p>
-            <div class="inputs"><input type="text" v-model="list.phone" placeholder="11位数"></div>
-            <p>验证码</p>
-            <div class="inputs inputs_code">
-                <div class="code"><input type="text" v-model="list.code" placeholder="6位数"></div>
-                <button class="btn_code" :class="{codes:disabled}" @click="getCode" :disabled="disabled_btn">{{time}}</button>
-            </div>
+            
             <p>萌娃照片<span>（最多上传5张）</span></p>
             <div class="img_list">
                 <div class="imgs" v-for="(item,index) in Item_img" :key="index">
@@ -28,7 +22,28 @@
             </div>
         </div>
 
-        <button class="btn" @click="Submission">提交申请</button>
+        <button class="btn" @click="xia">下一步</button>
+
+        <van-popup class="rights" v-model="show" position="right" :overlay="false">
+            <div class="information rights_">
+                <p>手机号（方便联系哦！）</p>
+                <div class="inputs"><input type="text" v-model="list.phone" placeholder="11位数"></div>
+                <p>验证码</p>
+                <div class="inputs inputs_code">
+                    <div class="code"><input type="text" v-model="list.code" placeholder="6位数"></div>
+                    <button class="btn_code" :class="{codes:disabled_btn}" @click="getCode" :disabled="disabled_btn">{{time}}</button>
+                </div>
+            </div>
+
+            <div class="Tip">
+                <p>Tip：1. 若需要修改图片信息请点击【返回】。</p>   
+                <p>2. 请正确填写萌娃信息，若出现虚假、反动、违法行为，我们将剔除活动资格。</p>           
+            </div>
+
+            <button class="btn" @click="Submission">提交</button>
+            
+            <div class="gohome go" @click="xia">返回</div>
+        </van-popup>
 
         <router-link to="/Whole">
             <div class="gohome">返回 <br>首页</div>
@@ -44,7 +59,7 @@ export default {
             list:{
                 name:'', remark:'', phone:'', code:'', formData:''
             },
-            disabled:false,disabled_btn:false
+            disabled:false,disabled_btn:false, show:false
         }
     },
     computed:{
@@ -66,8 +81,8 @@ export default {
             this.Item_imgs.splice(index,1)
         },
         getCode(){
-            if(this.list.code.length != 6) {
-                this.$toast('请按规范填写信息！')
+            if(this.list.phone.length != 11) {
+                this.$toast('请输入正确手机号！')
                 return
             }
             this.disabled_btn = true
@@ -81,11 +96,23 @@ export default {
                 }
             }, 1000)
         },
-        Submission(){
-            if(this.list.name.length > 10 || this.list.phone.length !=11 || this.list.remark.length > 15 || this.list.code.length != 6){
-                this.$toast('请按规范填写信息！')
+        xia(){
+            if(this.Item_img.length < 1){
+                this.$toast('请上传萌娃图片信息！')
                 return
             }
+            this.show = !this.show
+        },
+        Submission(){
+            if(this.list.name.length > 10 || this.list.remark.length > 15 || this.list.code.length != 6){
+                this.$toast('请填写规范信息！')
+                return
+            }
+            this.$toast.loading({
+                mask: true,
+                duration: 0,
+                message: '报名中...'
+            });
             var formData = new FormData()
             // formData.append('file', this.Item_imgs)         // 这是错的，不可以直接放在数组里，不然会取不到值
             for(var i = 0; i < this.Item_imgs.length; i ++){   
@@ -108,7 +135,7 @@ export default {
 </script>
 <style lang="less" scoped>
     #Signup{
-        width: 100%; background-color: white; height: 115vh; padding-bottom: 10vw;
+        width: 100%; background-color: white; min-height: 100vh; padding-bottom: 10vw;
     }
 
     *{
@@ -168,18 +195,48 @@ export default {
         }
     }
 
+    .Tip{
+        width: 90%; height: 20vw; margin: 0 auto; padding-top: 5vw; color: red; font-size: 3.5vw;
+        line-height: 5vw;
+        p{
+            margin: 0;
+        }
+        p:nth-child(2){
+            padding-left: 8vw;
+        }
+    }
+
     .btn{
         width: 90%; height: 13vw; margin-top: 10vw; margin-left: 5%; outline: none; border: 0; color: white; 
         font-family:PingFang-SC-Bold; font-weight: Bold; font-size: 4.5vw; letter-spacing: 0.5vw;
         background:rgba(117,190,168,1); border-radius:1.5vw; box-shadow:0px 0px 10px rgba(43,43,43,0.1);
     }
 
+    .rights{
+        width: 100%; height: 100vh;
+        .rights_{
+            margin-top: 10vw;
+        }
+    }
+
     .gohome{
         width: 17vw; height: 17vw; border-radius: 50%; background-color: white; position: fixed; bottom: 1vw; right: 5%; box-sizing: border-box;
         font-family:PingFang-SC-Medium; color:rgba(255,139,75,1); line-height: 5vw; text-align: center; padding-top: 3.5vw; font-size: 4vw;
+        animation: rights 1.5s linear 0s infinite alternate;
         -webkit-animation: rights 1.5s linear 0s infinite alternate; box-shadow:0px 0px 20px rgba(0,0,0,0.16);
     }
+    .go{
+        line-height: 10vw;
+    }
 
+    @keyframes rights{
+		from{
+			right:-20%;
+		}
+		to{
+			right:-1%;
+		}
+	}
     @-webkit-keyframes rights{
 		from{
 			right:-20%;

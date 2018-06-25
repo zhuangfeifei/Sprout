@@ -20,6 +20,8 @@ export const CODE = 'CODE'                  // 验证码
 
 export const PLAYER_RANKINGS = 'PLAYER_RANKINGS'                  // 获取某一活动主题下投票排名情况
 
+export const PLAYER_RANKINGS_ORDERNUM = 'PLAYER_RANKINGS_ORDERNUM'                  // 获取某一活动主题下投票排名情况
+
 export const NEW_EVA = 'NEW_EVA'                  // 获取最新萌娃
 
 export const EVA_DETAILS = 'EVA_DETAILS'                  // 获取萌娃详情信息

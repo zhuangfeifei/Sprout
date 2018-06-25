@@ -95,9 +95,15 @@ export default {
         },
         tabs(index){
             this.num = index
-            if(index == 0) this.$store.dispatch('playerRankings')
+            if(index == 0) {
+                this.$store.commit('PLAYER_RANKINGS_ORDERNUM', true)
+                this.$store.dispatch('playerRankings')
+            }
             if(index == 1) this.$store.dispatch('newEva')
-            if(index == 2) this.$store.dispatch('playerRankings')
+            if(index == 2) {
+                this.$store.commit('PLAYER_RANKINGS_ORDERNUM', false)
+                this.$store.dispatch('playerRankings')
+            }
         },
         rule(){
             this.$store.commit('RULE_SHOW', !this.rule_show)
@@ -184,7 +190,7 @@ export default {
             .list_item{
                 width: 95%; border-radius: 3vw; box-shadow:4px 0px 16px rgba(35,24,21,0.2); font-size: 3.5vw; padding-bottom: 3vw; margin-top: 5vw; position: relative;
                 img{
-                    width: 100%; height: 35vw; border-top-left-radius: 3vw; border-top-right-radius: 3vw;
+                    width: 100%; border-top-left-radius: 3vw; border-top-right-radius: 3vw;
                 }
                 p{margin: 0; padding: 0 2vw; line-height: 4vw; margin-top: 2vw; }
                 p:nth-child(3){
@@ -210,7 +216,8 @@ export default {
     }
 
     .footter{
-        width: 100%; height: 20vw; position: fixed; bottom: 0; left: 0; display: flex; -webkit-animation:bottoms 1s linear 0s 1 alternate;
+        width: 100%; height: 20vw; position: fixed; bottom: 0; left: 0; display: flex; animation:bottoms 1s linear 0s 1 alternate;
+        -webkit-animation:bottoms 1s linear 0s 1 alternate;
         a{ width: 70%; height: 100%;}
         a div:nth-child(1){
             width: 100%; height: 100%; text-align: center; background:rgba(117,190,168,1); line-height: 20vw; 
@@ -274,13 +281,12 @@ export default {
         color: white;
     }
 
-
-    @-webkit-keyframes dong{
+    @keyframes bottoms{
 		from{
-			top:2vw;
+			bottom:-20vw;
 		}
 		to{
-			top: 6vw;
+			bottom: 0vw;
 		}
 	}
     @-webkit-keyframes bottoms{

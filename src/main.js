@@ -3,6 +3,9 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+// 缓存页面
+// import Navigation from 'vue-navigation'
+// Vue.use(Navigation, {router})
 
 import Vant from 'vant';
 import 'vant/lib/vant-css/index.css';

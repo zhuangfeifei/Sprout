@@ -2,8 +2,10 @@
   <div id="app">
     <transition :name="transitionName">
         <!--每个页面缓存，只有第一次加载会请求数据，执行生命周期-->
-      <!--<keep-alive><router-view /></keep-alive>-->
-      <router-view />
+        <!--<keep-alive><router-view /></keep-alive>-->
+        <!--只有返回才缓存页面，应该用这个-->
+        <!--<navigation><router-view /></navigation>-->
+        <router-view />
     </transition>
   </div>
 </template>
@@ -20,7 +22,7 @@ export default {
     
   },
   created(){
-      
+         
   },
   watch: {//使用watch 监听$router的变化
     $route(to, from) {
@@ -35,9 +37,6 @@ export default {
         }
         if(to.meta.index == 0 && from.meta.index == 1) {
             this.transitionName = 'slide-bottom'
-        }
-        if(to.meta.index == 3 && from.meta.index == 1) {
-            this.transitionName = 'slide-right1'
         }
     }
   }
@@ -66,15 +65,6 @@ export default {
         left:0;
         bottom: 0;
     }
-    .slide-right1-enter-active,
-    .slide-right1-leave-active {
-        will-change: transform;
-        transition: all 0.5s;
-        position: absolute;
-        width:100%;
-        left:0;
-        bottom: -15vh;
-    }
     .slide-bottom-enter {
         transform: translateY(-100%);
     }
@@ -87,7 +77,7 @@ export default {
     .slide-top-leave-active {
         transform: translateY(-100%);
     }
-    .slide-right-enter, .slide-right1-enter {
+    .slide-right-enter {
         transform: translateX(100%);
     }
     .slide-right-leave-active {
