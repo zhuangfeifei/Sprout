@@ -7,6 +7,18 @@
                     <img v-if="ACTIVITY.STATUS == 1" src="../assets/img/云朵_进行中@2x.png" alt="">
                     <img v-if="ACTIVITY.STATUS == 2" src="../assets/img/云朵_已结束@2x.png" alt="">
                 </div>
+
+                <div class="end">
+                    <h3>奖品领取时间：</h3>
+                    <p>2018年7月23日-7月31日</p>
+                    <p>周一至周五15:00-17:00</p>
+                    <h3>奖品领取地点：</h3>
+                    <p>苏州市相城区华元路818号</p>
+                    <p>方圆里商业广场苏浙徽农家大院</p>
+                    <h3>奖品领取流程：</h3>
+                    <p>通过宝贝名字和预留手机号码进行领奖</p>
+                </div>
+
                 <div class="foot" v-if="ACTIVITY">
                     <h3>{{ACTIVITY.TITLE}}</h3>
                     <p>报名时间： {{ACTIVITY.JOIN_START_TIME}}~{{ACTIVITY.JOIN_END_TIME}}</p>
@@ -51,7 +63,8 @@ export default {
             if(this.ACTIVITY.STATUS == 1) this.$router.push({path:'/Whole'})
             if(this.ACTIVITY.STATUS == 2) this.$router.push({path:'/Whole'})
             // this.$router.push({path:'/Whole'})
-        }
+        },
+        
     },
     watch:{
         
@@ -75,6 +88,14 @@ export default {
             width: 100%; height: 100%;
         }
     }
+
+    .end{
+        width: 70%; text-align: center; position: absolute; top: 20vh; left: 15%; background-color: rgba(255, 255, 255, 0.9); border-radius: 2vw; line-height: 5vw;
+        box-shadow:4px 0px 16px rgba(35,24,21,0.2);
+        h3{ font-size: 4vw; }
+        p{ font-size: 3.5vw; }
+    }
+
     .font{font-family: PingFang-SC-Medium; font-weight: Medium;}
     .foot{
         width: 90%; height: 25vw; position: absolute; bottom: 18vw; left: 5%; text-align: center; .font;

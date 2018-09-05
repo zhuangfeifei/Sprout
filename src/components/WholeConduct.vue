@@ -18,7 +18,7 @@
                     <div class="list" v-if="playerRankings">
                         <div class="list_1">
                             <div class="list_item" v-if="index%2 == 0" v-for="(item,index) in playerRankings" @click="List_detils(item)" :key="index">
-                                <img :src="imgUrl + item.coverPic" alt="">
+                                <img v-lazy="imgUrl + item.coverPic" alt="">
                                 <p>{{item.joinName}}</p>
                                 <p>{{item.remark}}</p>
                                 <div><img src="../assets/img/活动页面_图标_投票数@2x.png" alt=""><span>{{item.voteNum}}</span><span>投票</span></div>
@@ -27,7 +27,7 @@
                         </div>
                         <div class="list_2">
                             <div class="list_item" v-if="index%2 != 0" v-for="(item,index) in playerRankings" @click="List_detils(item)" :key="index">
-                                <img :src="imgUrl + item.coverPic" alt="">
+                                <img v-lazy="imgUrl + item.coverPic" alt="">
                                 <p>{{item.joinName}}</p>
                                 <p>{{item.remark}}</p>
                                 <div><img src="../assets/img/活动页面_图标_投票数@2x.png" alt=""><span>{{item.voteNum}}</span><span>投票</span></div>

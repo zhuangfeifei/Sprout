@@ -7,7 +7,8 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 import { Toast } from 'vant'
 
-let localhostDev = true
+let localhostDev = false
+
 let url = localhostDev ? '/vote' : 'http://www.homeamc.cn'
 let imgUrl = url + '/shopping/kaptcha/'
 
@@ -90,8 +91,9 @@ const actions = {
         Api.post('/shopping/vote/playerRankings', $.param({ activityId: parseInt(Util.getLocal('activity').ID), codeNum: codeNums}))
         .then(res =>{
             // console.log(res.data)
+            // console.log(state.activity.STATUS)
             if(res.data.code == 200) {
-                if(state.orderNum_list){
+                if(state.orderNum_list && state.activity.STATUS != 2){
                     var list = res.data.data
                     function compare(property) {
                         return function(a, b) {

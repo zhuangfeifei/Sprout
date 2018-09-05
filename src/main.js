@@ -19,7 +19,7 @@ Vue.prototype.$Util = Util
 import VueLazyLoad from 'vue-lazyload'
 Vue.use(VueLazyLoad,{
     // error:'../static/error.png',
-    loading:'../static/placeholder.gif'
+    // loading:'../static/placeholder.gif'
 })
 
 Vue.config.productionTip = false

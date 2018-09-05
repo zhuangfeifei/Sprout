@@ -220,10 +220,10 @@ export default {
     }
 
     .gohome{
-        width: 17vw; height: 17vw; border-radius: 50%; background-color: white; position: fixed; bottom: 1vw; right: 5%; box-sizing: border-box;
+        width: 17vw; height: 17vw; border-radius: 50%; background-color: white; position: fixed; bottom: 1vw; right: 3%; box-sizing: border-box;
         font-family:PingFang-SC-Medium; color:rgba(255,139,75,1); line-height: 5vw; text-align: center; padding-top: 3.5vw; font-size: 4vw;
-        animation: rights 1.5s linear 0s infinite alternate;
-        -webkit-animation: rights 1.5s linear 0s infinite alternate; box-shadow:0px 0px 20px rgba(0,0,0,0.16);
+        // animation: rights 1.5s linear 0s infinite alternate; -webkit-animation: rights 1.5s linear 0s infinite alternate; 
+        box-shadow:0px 0px 20px rgba(0,0,0,0.16);
     }
     .go{
         line-height: 10vw;

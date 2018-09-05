@@ -1,6 +1,10 @@
 <template>
     <div id="Detils" v-show="show">
 
+        <router-link to="/Whole">
+            <img class="gohome" src="../assets/img/fanhui.png" alt="">
+        </router-link>
+
         <scroller lock-y>
             <div class="box1" @click="isShowimg">
                 <div class="box1-item" v-for="(item,index) in evaDetails.pictures" :key="index">
@@ -28,7 +32,7 @@
             <button class="votes1" @click="Draw">给Ta拉票</button>
         </div>
 
-        <van-popup v-model="show_vote" class="sign_vote" @click-overlay="isvote">
+        <van-popup v-model="show_vote" class="sign_vote">
             <div class="sign_votes">
                 <img src="../assets/img/投票_图_投票成功@2x.png" alt="">
                 <p class="hao">{{orderNum}}号</p>
@@ -37,8 +41,6 @@
                 <button class="vote" @click="Draw">给Ta拉票</button>
             </div>
         </van-popup>
-
-        <div class="gohome" @click="isvote">返回 <br>首页</div>
 
         <img id="Draw_img" src="../assets/img/Draw.png" v-show="share_show" @click="Draw" alt="">
 
@@ -62,8 +64,6 @@
     </div>
 </template>
 <script>
-import wx from 'weixin-js-sdk'
-import Api from '../api'
 import { Scroller } from 'vux'
 import { Swiper, SwiperItem, } from 'vux'
 export default {
@@ -113,7 +113,7 @@ export default {
             $('.box1').css('width',''+(widths*this.evaDetails.pictures.length + 11)+'vw')
         })
 
-        this.wxs()
+        
     },
     methods:{
         isShowimg(){
@@ -134,59 +134,6 @@ export default {
         Draw(){
             this.show_vote = false
             this.share_show = !this.share_show
-        },
-        wxs(){
-            Api.post('/shopping/vote/shire',$.param({ wxh: this.$Util.getLocal('sprout_wxhs'), openId: this.$Util.getLocal('sprout_openIds') }))
-            .then(res =>{
-                // console.log(res.data)
-                if(res.data.code == 200) {
-                    wx.config({
-                        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                        appId: res.data.data.appId, // 必填，公众号的唯一标识
-                        timestamp: res.data.data.timestamp, // 必填，生成签名的时间戳
-                        nonceStr: res.data.data.nonce, // 必填，生成签名的随机串
-                        signature: res.data.data.signature,// 必填，签名
-                        jsApiList: ['onMenuShareAppMessage','onMenuShareTimeline'] // 必填，需要使用的JS接口列表
-                    })
-                    wx.ready(()=>{
-                        // if(isWho){
-                            wx.onMenuShareAppMessage({
-                                title: '方圆里萌主活动', // 分享标题
-                                desc: '谁才是苏城方圆里公认的“萌主”？ 暨苏州相城方圆里最萌宝贝线上评选活动', // 分享描述
-                                link: 'http://www.homeamc.cn/shopping/eva/seminar?wxh=' + this.$Util.getLocal('sprout_wxhs'), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                                imgUrl: 'http://www.homeamc.cn/shopping/static/img/eva.png', // 分享图标
-                                type: '', // 分享类型,music、video或link，不填默认为link
-                                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-                                success: function (res) {
-                                    // console.log(res)
-                                },
-                                fail: function (res) {
-                                    // console.log(res)
-                                }
-                            })
-                        // }else{
-                            wx.onMenuShareTimeline({
-                                title: '方圆里萌主活动', // 分享标题
-                                link: 'http://www.homeamc.cn/shopping/eva/seminar?wxh=' + this.$Util.getLocal('sprout_wxhs'), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                                imgUrl: 'http://www.homeamc.cn/shopping/static/img/eva.png', // 分享图标
-                                success: function (res) {
-                                    // console.log(res)
-                                },
-                                fail: function (res) {
-                                    // console.log(res)
-                                }
-                            })
-                        // }
-                    })
-                }
-            })
-            .catch(err => console.log(err))
-        },
-        shareFriends(){
-            // this.wxs(true)
-        },
-        shareCircle(){
-            // this.wxs(false)
         },
     },
     watch:{
@@ -290,10 +237,7 @@ export default {
     }
 
     .gohome{
-        width: 17vw; height: 17vw; border-radius: 50%; background-color: white; position: fixed; bottom: 1vw; right: 5%; box-sizing: border-box;
-        font-family:PingFang-SC-Medium; color:rgba(255,139,75,1); line-height: 5vw; text-align: center; padding-top: 3.5vw; font-size: 4vw;
-        animation: rights 1.5s linear 0s infinite alternate;
-        -webkit-animation: rights 1.5s linear 0s infinite alternate; box-shadow:0px 0px 20px rgba(0,0,0,0.16); z-index: 9999;
+        width: 10vw; height: 10vw; position: fixed; top: 2vw; left: 3vw; z-index: 9999;
     }
 
 

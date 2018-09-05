@@ -3,7 +3,7 @@ import store from './store'
 import router from './router/index'
 import { Toast } from 'vant'
 
-let localhostDev = true
+let localhostDev = false
 let url = localhostDev ? '/vote' : 'http://www.homeamc.cn'
 
 const api = axios.create();
